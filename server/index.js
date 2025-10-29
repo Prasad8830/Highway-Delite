@@ -19,6 +19,9 @@ app.use(express.json());
 // static images (you can drop images inside server/public/images)
 app.use('/images', express.static(__dirname + '/public/images'));
 
+// Health check endpoints
+app.get('/', (req, res) => res.json({ message: 'Highway Delite API Server' }));
+app.get('/healthz', (req, res) => res.json({ status: 'ok' }));
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 app.use('/api/experiences', experiencesRouter);

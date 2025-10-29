@@ -1,0 +1,35 @@
+services:
+  # Backend API Service
+  - type: web
+    name: highway-delite-api
+    env: node
+    rootDir: project/server
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false # User needs to set this in Render dashboard
+    autoDeploy: true
+
+  # Frontend Static Site
+  - type: web
+    name: highway-delite-web
+    env: static
+    rootDir: project/client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    region: oregon
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://highway-delite-api.onrender.com # Update this after backend is deployed
